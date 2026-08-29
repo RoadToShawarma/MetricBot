@@ -28,6 +28,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Launcher is built as a separate executable and must not be compiled into WPF app. -->
+    <Compile Remove="Launcher\**\*.cs" />
+    <None Remove="Launcher\**\*" />
+
     <None Remove="Assets\Icons\*.png" />
     <Resource Include="Assets\Icons\*.png" />
     <None Update="Assets\icon.ico">
