@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+
+    <!--
+      net10.0-windows: основная сборка для Windows 10/11.
+      net6.0-windows: отдельная legacy-сборка для Windows 7 SP1/8.1.
+      .NET 6 больше не поддерживается Microsoft, но это последняя ветка modern .NET,
+      официально работавшая на Windows 7/8.1.
+    -->
+    <TargetFrameworks>net10.0-windows;net6.0-windows</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>MetricBot</AssemblyName>
+    <RootNamespace>MetricBot</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+
+    <!-- При публикации обязательно укажите -r win-x64 или -r win-x86. -->
+    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Icons\*.png" />
+    <Resource Include="Assets\Icons\*.png" />
+    <None Update="Assets\icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+</Project>
