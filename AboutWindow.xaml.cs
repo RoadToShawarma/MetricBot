@@ -6,31 +6,34 @@ namespace MetricBot
 {
     public partial class AboutWindow : Window
     {
-        private const string Functionality = "TeaLover, Azgeda, Eteria";
-        private const string Code          = "Claude, ChatGPT";
-        private const string Ui            = "TeaLover";
-        private const string CgbsWebsite   = "https://astra-cgbs.ru";
-        private const string Support       = "itcgbs@gmail.com";
+#if NET10_0_OR_GREATER
+        private const string Edition       = "Modern";
+#else
+        private const string Edition       = "Legacy";
+#endif
+        private const string Functionality = "RoadToShawarma, Azgeda";
+        private const string Code          = "Claude, Codex";
+        private const string Ui            = "RoadToShawarma";
+        private const string ProjectUrl    = "https://github.com/RoadToShawarma/MetricBot";
 
         public AboutWindow()
         {
             InitializeComponent();
 
+            var architecture = Environment.Is64BitProcess ? "x64" : "x86";
+            TxtVersion.Text       = $"v1.0.0 · {Edition} · {architecture}";
             TxtFunctionality.Text = Functionality;
             TxtCode.Text          = Code;
             TxtUi.Text            = Ui;
-            TxtSupport.Text       = Support;
+            TxtSupport.Text       = "GitHub";
         }
 
         private void BtnClose_Click(object s, RoutedEventArgs e) => Close();
 
 
-        private void Cgbs_Click(object s, RoutedEventArgs e) => OpenUrl(CgbsWebsite);
-
         private void TxtSupport_Click(object s, MouseButtonEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(Support))
-                OpenUrl($"mailto:{Support}");
+            OpenUrl(ProjectUrl);
         }
 
         private static void OpenUrl(string url)
