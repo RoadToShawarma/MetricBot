@@ -40,6 +40,36 @@ namespace MetricBot
             UpdateMinimizedState();
 
             UpdateChromiumStatus();
+            UpdatePasswordStatus();
+        }
+
+        private void UpdatePasswordStatus()
+        {
+            var enabled = PasswordService.IsPasswordSet;
+            TxtPasswordStatus.Text = enabled
+                ? "Пароль установлен. Управление приложением защищено."
+                : "Пароль не установлен.";
+            BtnSetPassword.Visibility = enabled ? Visibility.Collapsed : Visibility.Visible;
+            BtnChangePassword.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+            BtnRemovePassword.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void BtnSetPassword_Click(object s, RoutedEventArgs e)
+        {
+            if (new PasswordWindow(PasswordWindow.PasswordMode.Create) { Owner = this }.ShowDialog() == true)
+                UpdatePasswordStatus();
+        }
+
+        private void BtnChangePassword_Click(object s, RoutedEventArgs e)
+        {
+            if (new PasswordWindow(PasswordWindow.PasswordMode.Change) { Owner = this }.ShowDialog() == true)
+                UpdatePasswordStatus();
+        }
+
+        private void BtnRemovePassword_Click(object s, RoutedEventArgs e)
+        {
+            if (new PasswordWindow(PasswordWindow.PasswordMode.Remove) { Owner = this }.ShowDialog() == true)
+                UpdatePasswordStatus();
         }
 
         private void UpdateChromiumStatus()

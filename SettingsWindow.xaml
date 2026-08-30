@@ -122,6 +122,25 @@
 
                 <Border Style="{StaticResource Sep}"/>
 
+                <!-- Защита -->
+                <TextBlock Text="Защита приложения" Style="{StaticResource SectionLabel}"/>
+                <TextBlock x:Name="TxtPasswordStatus"
+                           Style="{StaticResource MonoLabel}"
+                           Foreground="{StaticResource Text2Brush}"
+                           Margin="0,0,0,8"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnSetPassword" Content="Установить пароль"
+                            Style="{StaticResource AccentBtn}" Click="BtnSetPassword_Click"/>
+                    <Button x:Name="BtnChangePassword" Content="Сменить пароль"
+                            Style="{StaticResource OutlineBtn}" Margin="0,0,10,0"
+                            Click="BtnChangePassword_Click" Visibility="Collapsed"/>
+                    <Button x:Name="BtnRemovePassword" Content="Отключить"
+                            Style="{StaticResource OutlineBtn}"
+                            Click="BtnRemovePassword_Click" Visibility="Collapsed"/>
+                </StackPanel>
+
+                <Border Style="{StaticResource Sep}"/>
+
                 <!-- Логи -->
                 <TextBlock Text="Журнал событий" Style="{StaticResource SectionLabel}"/>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,6">

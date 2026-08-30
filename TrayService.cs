@@ -15,6 +15,7 @@ namespace MetricBot
         public event Action? OnShow;
         public event Action? OnStart;
         public event Action? OnStop;
+        public event Action? OnLock;
         public event Action? OnExit;
 
         public TrayService()
@@ -30,6 +31,7 @@ namespace MetricBot
             menu.Items.Add(_miStart);
             menu.Items.Add(_miStop);
             menu.Items.Add(new WinForms.ToolStripSeparator());
+            menu.Items.Add(new WinForms.ToolStripMenuItem("🔒  Заблокировать", null, (_, _) => OnLock?.Invoke()));
             menu.Items.Add(new WinForms.ToolStripMenuItem("Выход", null, (_, _) => OnExit?.Invoke()));
 
             _icon = new WinForms.NotifyIcon

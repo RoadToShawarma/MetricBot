@@ -17,6 +17,8 @@ namespace MetricBot
         private TrayService? _tray;
         private int      _seqIndex = 0;   // для Sequential режима
         private bool     _isExitRequested;
+        private bool     _isLocked;
+        private bool     _unlockDialogOpen;
 
         // ── Автозапуск ────────────────────────────────────────────
         private const string AutorunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -63,9 +65,10 @@ namespace MetricBot
 
             _tray = new TrayService();
             _tray.OnShow  += ShowWindow;
-            _tray.OnStart += () => Dispatcher.Invoke(() => _ = StartAsync());
-            _tray.OnStop  += () => Dispatcher.Invoke(Stop);
-            _tray.OnExit  += () => Dispatcher.Invoke(ExitApp);
+            _tray.OnStart += () => Dispatcher.Invoke(() => RunUnlocked(() => _ = StartAsync()));
+            _tray.OnStop  += () => Dispatcher.Invoke(() => RunUnlocked(Stop));
+            _tray.OnLock  += () => Dispatcher.Invoke(Lock);
+            _tray.OnExit  += () => Dispatcher.Invoke(() => RunUnlocked(ExitApp));
 
             Closing += OnWindowClosing;
             ContentRendered += OnContentRendered;
@@ -76,13 +79,21 @@ namespace MetricBot
 
             if (AppConfig.Current.Autostart)
                 Loaded += (_, _) => _ = StartAsync();
+
+            _isLocked = PasswordService.IsPasswordSet;
         }
 
         private void OnContentRendered(object? sender, EventArgs e)
         {
             ContentRendered -= OnContentRendered;
             var cfg = AppConfig.Current;
-            if (cfg.StartMinimized)
+            if (_isLocked)
+            {
+                Hide();
+                if (RequestUnlock())
+                    BringToFront();
+            }
+            else if (cfg.StartMinimized)
             {
                 Hide();
                 _tray?.Notify("MetricBot запущен в трее");
@@ -95,10 +106,61 @@ namespace MetricBot
                 return;
 
             e.Cancel = true;
-            Hide();
+            if (PasswordService.IsPasswordSet)
+                Lock();
+            else
+                Hide();
         }
 
-        private void ShowWindow() => BringToFront();
+        private void ShowWindow() => Dispatcher.Invoke(() =>
+        {
+            if (!_isLocked || RequestUnlock())
+                BringToFront();
+        });
+
+        private void Lock()
+        {
+            if (!PasswordService.IsPasswordSet)
+                return;
+
+            _isLocked = true;
+
+            foreach (Window ownedWindow in OwnedWindows.Cast<Window>().ToArray())
+                ownedWindow.Close();
+
+            Hide();
+            _tray?.Notify("MetricBot заблокирован");
+        }
+
+        private bool RequestUnlock()
+        {
+            if (!_isLocked)
+                return true;
+            if (_unlockDialogOpen)
+                return false;
+
+            _unlockDialogOpen = true;
+            try
+            {
+                var dialog = new PasswordWindow(PasswordWindow.PasswordMode.Unlock);
+                if (dialog.ShowDialog() == true)
+                {
+                    _isLocked = false;
+                    return true;
+                }
+                return false;
+            }
+            finally
+            {
+                _unlockDialogOpen = false;
+            }
+        }
+
+        private void RunUnlocked(Action action)
+        {
+            if (!_isLocked || RequestUnlock())
+                action();
+        }
 
         public void BringToFront()
         {
@@ -107,6 +169,9 @@ namespace MetricBot
                 Dispatcher.Invoke(BringToFront);
                 return;
             }
+
+            if (_isLocked && !RequestUnlock())
+                return;
 
             if (!IsVisible)
                 Show();
