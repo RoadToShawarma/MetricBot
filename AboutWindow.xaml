@@ -10,50 +10,54 @@
 
     <StackPanel>
 
-        <!-- Логотип + версия -->
+        <!-- Логотип, редакция и версия -->
         <Border Background="{StaticResource SurfaceBrush}"
-                Height="68"
+                Height="92"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,0,0,1">
-            <Grid Margin="24,0" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <Grid Margin="24,0">
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock FontFamily="Consolas"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center">
+                        <Run Foreground="#E0E0E0" Text="Metric"/><Run Foreground="{StaticResource AccentBrush}" Text="Bot"/>
+                    </TextBlock>
 
-                <TextBlock Grid.Column="0"
-                           FontFamily="Consolas"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center">
-                    <Run Foreground="#E0E0E0" Text="Metric"/><Run Foreground="{StaticResource AccentBrush}" Text="Bot"/>
-                </TextBlock>
-
-                <TextBlock x:Name="TxtVersion"
-                           Grid.Column="1"
-                           Text="v1.0.0"
+                <TextBlock x:Name="TxtEdition"
+                           Margin="0,4,0,0"
                            Style="{StaticResource MonoLabel}"
                            FontSize="11"
                            Foreground="{StaticResource Text2Brush}"
-                           HorizontalAlignment="Right"
-                           TextAlignment="Right"
-                           VerticalAlignment="Center"/>
+                           HorizontalAlignment="Left"/>
+                <TextBlock x:Name="TxtVersion"
+                           Margin="0,3,0,0"
+                           Text="v1.0.1"
+                           Style="{StaticResource MonoLabel}"
+                           FontSize="11"
+                           Foreground="{StaticResource Text2Brush}"/>
+                </StackPanel>
+
+                <Image Source="Assets/icon.ico"
+                       Width="58" Height="58"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>
             </Grid>
         </Border>
 
         <!-- Инфо -->
-        <StackPanel Margin="24,20,24,0">
-            <Grid Margin="0,0,0,10">
+        <StackPanel Margin="24,14,24,14">
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="155"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="28"/>
-                    <RowDefinition Height="28"/>
-                    <RowDefinition Height="28"/>
-                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="23"/>
+                    <RowDefinition Height="23"/>
+                    <RowDefinition Height="23"/>
+                    <RowDefinition Height="23"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -100,24 +104,28 @@
                            FontSize="11"
                            VerticalAlignment="Center"
                            Cursor="Hand"
-                           TextDecorations="Underline"
                            MouseLeftButtonUp="TxtSupport_Click"/>
             </Grid>
         </StackPanel>
 
-        <!-- Кнопка -->
+        <!-- Описание -->
         <Border Background="{StaticResource SurfaceBrush}"
-                Height="68"
                 BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="0,1,0,0"
-                Margin="0,16,0,0">
-            <Grid>
-                <Button Content="Закрыть"
-                        Style="{StaticResource OutlineBtn}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Click="BtnClose_Click"/>
-            </Grid>
+                BorderThickness="0,1,0,0">
+            <StackPanel Margin="22,14,22,17">
+                <TextBlock Style="{StaticResource MonoLabel}"
+                           FontSize="11"
+                           Foreground="{StaticResource Text2Brush}"
+                           TextWrapping="Wrap">
+                    <Run Text="MetricBot" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"/><Run Text=" — программа для автоматического&#x0a;посещения заданных веб-страниц через&#x0a;настраиваемые интервалы"/>
+                </TextBlock>
+                <TextBlock Margin="0,16,0,0"
+                           Style="{StaticResource MonoLabel}"
+                           FontSize="11"
+                           Foreground="{StaticResource Text2Brush}"
+                           TextWrapping="Wrap"
+                           Text="Помогает поддерживать регулярную активность на&#x0a;сайтах и избавляет от необходимости открывать&#x0a;нужные страницы вручную"/>
+            </StackPanel>
         </Border>
     </StackPanel>
 </Window>

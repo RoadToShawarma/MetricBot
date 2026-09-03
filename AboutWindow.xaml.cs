@@ -21,15 +21,13 @@ namespace MetricBot
             InitializeComponent();
 
             var architecture = Environment.Is64BitProcess ? "x64" : "x86";
-            TxtVersion.Text       = $"{Edition} {architecture}\nv1.0.0";
+            TxtEdition.Text       = $"{Edition} {architecture}";
+            TxtVersion.Text       = "v1.0.1";
             TxtFunctionality.Text = Functionality;
             TxtCode.Text          = Code;
             TxtUi.Text            = Ui;
             TxtSupport.Text       = "GitHub";
         }
-
-        private void BtnClose_Click(object s, RoutedEventArgs e) => Close();
-
 
         private void TxtSupport_Click(object s, MouseButtonEventArgs e)
         {
