@@ -6,6 +6,7 @@
         MinWidth="500" MinHeight="400"
         Background="{StaticResource BgBrush}"
         WindowStartupLocation="CenterScreen"
+        PreviewMouseDown="MainWindow_PreviewMouseDown"
         FontFamily="Consolas">
 
     <Grid>

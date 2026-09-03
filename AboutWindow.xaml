@@ -28,18 +28,20 @@
                 <TextBlock x:Name="TxtEdition"
                            Margin="0,4,0,0"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontFamily="Consolas"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            HorizontalAlignment="Left"/>
                 <TextBlock x:Name="TxtVersion"
                            Margin="0,3,0,0"
                            Text="v1.0.1"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontFamily="Consolas"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"/>
                 </StackPanel>
 
-                <Image Source="Assets/icon.ico"
+                <Image Source="Assets/Icons/application.png"
                        Width="58" Height="58"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"/>
@@ -47,7 +49,7 @@
         </Border>
 
         <!-- Инфо -->
-        <StackPanel Margin="24,14,24,14">
+        <StackPanel Margin="24,14,24,14" TextElement.FontFamily="Consolas">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="155"/>
@@ -63,45 +65,45 @@
                 <TextBlock Grid.Row="0" Grid.Column="0"
                            Text="Функционал:"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtFunctionality" Grid.Row="0" Grid.Column="1"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0"
                            Text="Код:"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtCode" Grid.Row="1" Grid.Column="1"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0"
                            Text="UI/UX:"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtUi" Grid.Row="2" Grid.Column="1"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0"
                            Text="Страница проекта:"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtSupport" Grid.Row="3" Grid.Column="1"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontSize="12"
                            VerticalAlignment="Center"
                            Cursor="Hand"
                            MouseLeftButtonUp="TxtSupport_Click"/>
@@ -114,17 +116,19 @@
                 BorderThickness="0,1,0,0">
             <StackPanel Margin="22,14,22,17">
                 <TextBlock Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontFamily="Consolas"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            TextWrapping="Wrap">
-                    <Run Text="MetricBot" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"/><Run Text=" — программа для автоматического&#x0a;посещения заданных веб-страниц через&#x0a;настраиваемые интервалы"/>
+                    <Run Text="MetricBot" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"/><Run Text=" — программа для автоматического посещения заданных веб-страниц через настраиваемые интервалы"/>
                 </TextBlock>
                 <TextBlock Margin="0,16,0,0"
                            Style="{StaticResource MonoLabel}"
-                           FontSize="11"
+                           FontFamily="Consolas"
+                           FontSize="12"
                            Foreground="{StaticResource Text2Brush}"
                            TextWrapping="Wrap"
-                           Text="Помогает поддерживать регулярную активность на&#x0a;сайтах и избавляет от необходимости открывать&#x0a;нужные страницы вручную"/>
+                           Text="Помогает поддерживать регулярную активность на сайтах и избавляет от необходимости открывать нужные страницы вручную"/>
             </StackPanel>
         </Border>
     </StackPanel>

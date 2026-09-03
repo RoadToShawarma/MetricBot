@@ -7,6 +7,7 @@ using WpfColor = System.Windows.Media.Color;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Windows.Input;
 
 namespace MetricBot
 {
@@ -19,6 +20,7 @@ namespace MetricBot
         private bool     _isExitRequested;
         private bool     _isLocked;
         private bool     _unlockDialogOpen;
+        private AboutWindow? _aboutWindow;
 
         // ── Автозапуск ────────────────────────────────────────────
         private const string AutorunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -206,7 +208,18 @@ namespace MetricBot
         }
 
         private void BtnSettings_Click(object s, RoutedEventArgs e) => new SettingsWindow { Owner = this }.ShowDialog();
-        private void BtnAbout_Click(object s, RoutedEventArgs e)    => new AboutWindow    { Owner = this }.ShowDialog();
+
+        private void BtnAbout_Click(object s, RoutedEventArgs e)
+        {
+            _aboutWindow = new AboutWindow { Owner = this };
+            _aboutWindow.Closed += (_, _) => _aboutWindow = null;
+            _aboutWindow.Show();
+        }
+
+        private void MainWindow_PreviewMouseDown(object s, MouseButtonEventArgs e)
+        {
+            _aboutWindow?.Close();
+        }
 
         private void BtnOpenLog_Click(object s, RoutedEventArgs e)
         {
