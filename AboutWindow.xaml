@@ -37,6 +37,7 @@
                            FontSize="11"
                            Foreground="{StaticResource Text2Brush}"
                            HorizontalAlignment="Right"
+                           TextAlignment="Right"
                            VerticalAlignment="Center"/>
             </Grid>
         </Border>

@@ -43,11 +43,12 @@ MetricBot — настольное приложение для Windows, кото
 
 ### Настройки и данные
 
-- `config.json` — настройки приложения; создаётся рядом с исполняемым файлом.
-- `metric_bot.log` — журнал событий по умолчанию; создаётся рядом с исполняемым файлом.
+- `%LocalAppData%\MetricBot\config.json` — настройки приложения. При первом запуске после обновления настройки автоматически копируются из старого `config.json` рядом с исполняемым файлом, если он существует.
+- `%LocalAppData%\MetricBot\Logs\MetricBot.log` — основной журнал событий.
+- `%LocalAppData%\MetricBot\Logs\Errors.log` — отдельный журнал ошибок. Ошибки также остаются в основном журнале.
 - `%LocalAppData%\MetricBot\security.json` — соль и хеш пароля. Сам пароль не сохраняется.
 
-Если пароль забыт, защиту можно сбросить удалением `security.json`. Для сохранения настроек и журнала каталог приложения должен быть доступен пользователю для записи.
+Если пароль забыт, защиту можно сбросить удалением `security.json`. Для пользовательского пути журнала выбранный каталог должен быть доступен для записи.
 
 ### Сборка из исходного кода
 
@@ -114,11 +115,12 @@ Closing the window keeps the application running in the system tray. To quit com
 
 ### Configuration and data
 
-- `config.json` — application settings, created next to the executable.
-- `metric_bot.log` — default event log, created next to the executable.
+- `%LocalAppData%\MetricBot\config.json` — application settings. On the first launch after updating, settings are automatically copied from the old `config.json` next to the executable, if it exists.
+- `%LocalAppData%\MetricBot\Logs\MetricBot.log` — main event log.
+- `%LocalAppData%\MetricBot\Logs\Errors.log` — separate error log. Errors also remain in the main log.
 - `%LocalAppData%\MetricBot\security.json` — the password salt and hash. The password itself is not stored.
 
-If the password is forgotten, protection can be reset by deleting `security.json`. The application directory must be writable by the current user so that settings and logs can be saved.
+If the password is forgotten, protection can be reset by deleting `security.json`. When using a custom log path, the selected directory must be writable.
 
 ### Building from source
 

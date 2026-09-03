@@ -36,21 +36,15 @@ namespace MetricBot
 
         public static void SetAutorun(bool enable)
         {
-            try
-            {
-                using var key = Registry.CurrentUser.OpenSubKey(AutorunKey, writable: true);
-                if (key == null) return;
-                if (enable)
-                    key.SetValue(AppName,
-                        $"\"{Process.GetCurrentProcess().MainModule!.FileName}\"");
-                else
-                    key.DeleteValue(AppName, throwOnMissingValue: false);
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show($"Не удалось изменить реестр:\n{ex.Message}",
-                    "Автозапуск", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            using var key = Registry.CurrentUser.OpenSubKey(AutorunKey, writable: true)
+                ?? throw new InvalidOperationException(
+                    $"Не удалось открыть раздел реестра HKCU\\{AutorunKey} для записи.");
+
+            if (enable)
+                key.SetValue(AppName,
+                    $"\"{Process.GetCurrentProcess().MainModule!.FileName}\"");
+            else
+                key.DeleteValue(AppName, throwOnMissingValue: false);
         }
 
         // ══════════════════════════════════════════════════════════

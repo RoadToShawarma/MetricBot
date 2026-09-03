@@ -14,6 +14,7 @@ namespace MetricBot
     {
         private static WpfRichTextBox? _box;
         private static string       _logFile = "";
+        private static string       _errorLogFile = "";
         private static readonly object _fileLock = new();
         private static int _lineCount = 0;
         private static Paragraph? _progressParagraph;
@@ -34,9 +35,28 @@ namespace MetricBot
         public static void RefreshLogPath()
         {
             var cfg = AppConfig.Current;
-            _logFile = string.IsNullOrWhiteSpace(cfg.LogPath)
-                ? Path.Combine(AppContext.BaseDirectory, "metric_bot.log")
+            var useDefaultPath = string.IsNullOrWhiteSpace(cfg.LogPath);
+            _logFile = useDefaultPath
+                ? Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "MetricBot", "Logs", "MetricBot.log")
                 : cfg.LogPath;
+
+            var logDirectory = Path.GetDirectoryName(Path.GetFullPath(_logFile))!;
+            _errorLogFile = Path.Combine(logDirectory, "Errors.log");
+
+            if (useDefaultPath)
+                MigrateLegacyLog();
+
+            try
+            {
+                lock (_fileLock)
+                {
+                    TrimToLimit(_logFile);
+                    TrimToLimit(_errorLogFile);
+                }
+            }
+            catch { /* Ошибка обслуживания лога не должна мешать запуску приложения. */ }
         }
 
         public static void Log(string message, LogLevel level = LogLevel.Info)
@@ -44,7 +64,7 @@ namespace MetricBot
             var line = BuildLine(message);
 
             // Пишем в файл
-            WriteFile(line);
+            WriteFile(line, level);
 
             // Пишем в UI
             if (_box != null)
@@ -65,7 +85,7 @@ namespace MetricBot
         public static void FinishProgress(string message, LogLevel level = LogLevel.Ok)
         {
             var line = BuildLine(message);
-            WriteFile(line);
+            WriteFile(line, level);
 
             if (_box != null)
             {
@@ -157,16 +177,70 @@ namespace MetricBot
             _              => WpfColor.FromRgb(0x39, 0xFF, 0x14),  // зелёный по умолч.
         };
 
-        private static void WriteFile(string line)
+        private static void WriteFile(string line, LogLevel level)
         {
             try
             {
                 lock (_fileLock)
-                    File.AppendAllText(_logFile, line + Environment.NewLine);
+                {
+                    AppendLimited(_logFile, line);
+                    if (level == LogLevel.Error &&
+                        !string.Equals(Path.GetFullPath(_logFile), Path.GetFullPath(_errorLogFile),
+                            StringComparison.OrdinalIgnoreCase))
+                        AppendLimited(_errorLogFile, line);
+                }
             }
             catch { /* не критично */ }
         }
 
+        private static void AppendLimited(string path, string line)
+        {
+            var directory = Path.GetDirectoryName(Path.GetFullPath(path));
+            if (!string.IsNullOrEmpty(directory))
+                Directory.CreateDirectory(directory);
+            var maxLines = AppConfig.Current.MaxLogLines;
+            if (maxLines <= 0)
+            {
+                File.AppendAllText(path, line + Environment.NewLine);
+                return;
+            }
+
+            var lines = File.Exists(path) ? File.ReadAllLines(path).ToList() : [];
+            lines.Add(line);
+            if (lines.Count > maxLines)
+                lines.RemoveRange(0, lines.Count - maxLines);
+
+            File.WriteAllLines(path, lines);
+        }
+
+        private static void TrimToLimit(string path)
+        {
+            var maxLines = AppConfig.Current.MaxLogLines;
+            if (maxLines <= 0 || !File.Exists(path))
+                return;
+
+            var lines = File.ReadAllLines(path);
+            if (lines.Length > maxLines)
+                File.WriteAllLines(path, lines.Skip(lines.Length - maxLines));
+        }
+
+        private static void MigrateLegacyLog()
+        {
+            var legacyPath = Path.Combine(AppContext.BaseDirectory, "metric_bot.log");
+            if (File.Exists(_logFile) || !File.Exists(legacyPath))
+                return;
+
+            try
+            {
+                var directory = Path.GetDirectoryName(_logFile);
+                if (!string.IsNullOrEmpty(directory))
+                    Directory.CreateDirectory(directory);
+                File.Copy(legacyPath, _logFile, overwrite: false);
+            }
+            catch { /* Старый лог остаётся на месте и не теряется. */ }
+        }
+
         public static string LogFilePath => _logFile;
+        public static string ErrorLogFilePath => _errorLogFile;
     }
 }

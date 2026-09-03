@@ -21,7 +21,7 @@ namespace MetricBot
             InitializeComponent();
 
             var architecture = Environment.Is64BitProcess ? "x64" : "x86";
-            TxtVersion.Text       = $"v1.0.0 · {Edition} · {architecture}";
+            TxtVersion.Text       = $"{Edition} {architecture}\nv1.0.0";
             TxtFunctionality.Text = Functionality;
             TxtCode.Text          = Code;
             TxtUi.Text            = Ui;

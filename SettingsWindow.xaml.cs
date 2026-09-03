@@ -88,7 +88,6 @@ namespace MetricBot
         // ── Автозапуск ────────────────────────────────────────────
         private void ChkAutorun_Changed(object s, RoutedEventArgs e)
         {
-            MainWindow.SetAutorun(ChkAutorun.IsChecked == true);
             UpdateMinimizedState();
         }
 
@@ -201,6 +200,29 @@ namespace MetricBot
             if (!int.TryParse(TxtMax.Text, out int mx)) mx = 39;
             if (mn > mx) { (mn, mx) = (mx, mn); }
             if (!int.TryParse(TxtMaxLines.Text, out int maxLines)) maxLines = 500;
+
+            var enableAutorun = ChkAutorun.IsChecked == true;
+            try
+            {
+                MainWindow.SetAutorun(enableAutorun);
+            }
+            catch (Exception ex)
+            {
+                var permissionsHint = ex is UnauthorizedAccessException or System.Security.SecurityException
+                    ? "\n\nВозможно, у текущего пользователя недостаточно прав для изменения этого раздела реестра."
+                    : string.Empty;
+
+                System.Windows.MessageBox.Show(
+                    $"Не удалось {(enableAutorun ? "включить" : "отключить")} автозапуск программы.\n\n" +
+                    $"Раздел: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\n" +
+                    $"Параметр: MetricBot\n" +
+                    $"Ошибка: {ex.GetType().Name}: {ex.Message}" +
+                    permissionsHint,
+                    "Ошибка сохранения автозапуска",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
 
             var cfg = AppConfig.Current;
             cfg.Urls = TxtUrls.Text
