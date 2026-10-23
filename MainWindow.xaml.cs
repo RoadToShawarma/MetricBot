@@ -83,16 +83,16 @@ namespace MetricBot
         {
             ContentRendered -= OnContentRendered;
             var cfg = AppConfig.Current;
-            if (_isLocked)
+            if (cfg.StartMinimized)
+            {
+                Hide();
+                _tray?.Notify("MetricBot запущен в трее");
+            }
+            else if (_isLocked)
             {
                 Hide();
                 if (RequestUnlock())
                     BringToFront();
-            }
-            else if (cfg.StartMinimized)
-            {
-                Hide();
-                _tray?.Notify("MetricBot запущен в трее");
             }
         }
 
